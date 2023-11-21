@@ -1,74 +1,55 @@
 library(shiny)
+# install.packages("devtools")
+#devtools::install_github("rstudio/gridlayout")
 library(gridlayout)
 library(bslib)
 library(DT)
-load("df.RData")
 library(dplyr)
 library(stringr)
+#install.packages("leaflet")
+library(leaflet)
+#install.packages("tidyverse")
+library(lubridate)  # Asegúrate de cargar lubridate
+#install.packages("sf")
+library(sf)
 
-
+load("Jp_map.Rdata")
+df <- df %>%
+  mutate(Periodo = as.Date(df$Periodo, "%d/%m/%y"))
 source("graficaydatos.R")
-
 nombresPaises <- leeDatos(df)
 
-ui <- grid_page(
-  layout = c(
-    "header  header  ",
-    "sidebar plot "
-  ),
-  row_sizes = c(
-    "100px",
-    "1fr"
-  ),
-  col_sizes = c(
-    "250px",
-    "1fr"
-  ),
-  gap_size = "1rem",
-  grid_card(
-    area = "sidebar",
-    card_header("Filtros"),
-    card_body(
-      selectInput(
-        inputId = "pais",
-        label = "Pais",
-        choices = nombresPaises,
-        selected = "Todos",
-        width = "100%"
+# Define UI ----
+ui <- fluidPage(
+  titlePanel("Visitantes de Japón"),
+  sidebarLayout(
+    position = "left",
+    sidebarPanel(      
+      h3("Filtros"),
+      selectInput(inputId = "pais", h4("Selecciona el país:"), 
+                 choices = nombresPaises, selected = "Todos"),
+      sliderInput(inputId = "anio", h4("Selecciona el período:"),
+                  min = 2017, max = 2023, value = c(2017, 2023)),
+    ),
+    mainPanel(
+      img(src = "japan.png", align = "right", height = 75, width = 150),
+      tabsetPanel(type = "tabs",
+      tabPanel("Gráfico", 
+               plotOutput("plotVisitantes")
       ),
-      em("Selecciona el pais que quieres filtrar")
-    )
-  ),
-  grid_card_text(
-    area = "header",
-    content = "Visitantes a Japon",
-    alignment = "start",
-    is_title = FALSE
-  ),
-  grid_card(
-    area = "plot",
-    card_header("Histórico de visitantes"),
-    card_body(
-      tabsetPanel(
-        nav_panel(
-          title = "Gráficas",
-          plotOutput("plotVisitantes")
-        ),
-        nav_panel(
-          title = "Datos",
-          DTOutput(outputId = "dfVisitantes", width = "100%")
-        )
-      )
+      tabPanel("Mapa", leafletOutput("mapa")),
+      tabPanel("Datos", DTOutput(outputId = "dfVisitantes")))
     )
   )
 )
 
-
+# Define server logic ----
 server <- function(input, output, session) {
   
   output$plotVisitantes <- renderPlot({
-    grafica1(df,input$pais)
+    grafica1(df, input$pais)
   })
+  
   
   output$dfVisitantes <- renderDT({
     if(input$pais == "Todos"){
@@ -78,8 +59,32 @@ server <- function(input, output, session) {
     }
     dfFiltrado <- japan_df
   })
+  
+  # Filtrar datos según la selección del usuario
+  datos_filtrados <- reactive({
+    
+    
+    if(input$pais != "Todos"){
+      filter(df,Pais==input$pais)%>%distinct(Pais, latitud, longitud)
+    }else{
+      df%>%distinct(Pais, latitud, longitud)
+    }
+  })
+
+  # # Crear el mapa
+  output$mapa <- renderLeaflet({
+    leaflet() %>%
+      addTiles() %>%
+      addCircleMarkers(
+        data = datos_filtrados(),
+        lat = ~latitud,  # Nombre de la columna de latitudes en df
+        lng = ~longitud, # Nombre de la columna de longitudes en df
+        label = ~Pais,   # Nombre de la columna de países en df
+        #popup = ~paste("País: ", Pais, "<br>Visitantes: ", Visitantes)  # Mostrar información en el popup
+      )
+  })
 }
 
-shinyApp(ui, server)
-  
+# Run the app ----
+shinyApp(ui = ui, server = server)
 
