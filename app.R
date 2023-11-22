@@ -1,4 +1,6 @@
 library(shiny)
+library(shinydashboard,  warn.conflicts = FALSE)
+library(shinyWidgets,  warn.conflicts = FALSE)
 # install.packages("devtools")
 #devtools::install_github("rstudio/gridlayout")
 library(gridlayout)
@@ -21,6 +23,9 @@ nombresPaises <- leeDatos(df)
 
 # Define UI ----
 ui <- fluidPage(
+  
+  title = "BEDU: Análisis de datos con R",
+  collapsible = TRUE,
   titlePanel("Visitantes de Japón"),
   sidebarLayout(
     position = "left",
@@ -38,6 +43,7 @@ ui <- fluidPage(
                plotOutput("plotVisitantes")
       ),
       tabPanel("Mapa", leafletOutput("mapa")),
+      tabPanel("Predicción", plotOutput("prediccion")),
       tabPanel("Datos", DTOutput(outputId = "dfVisitantes")))
     )
   )
@@ -50,6 +56,9 @@ server <- function(input, output, session) {
     grafica1(df, input$pais)
   })
   
+  output$prediccion <- renderPlot({
+    graficaPrediccion()
+  })
   
   output$dfVisitantes <- renderDT({
     if(input$pais == "Todos"){
@@ -59,6 +68,7 @@ server <- function(input, output, session) {
     }
     dfFiltrado <- japan_df
   })
+  
   
   # Filtrar datos según la selección del usuario
   datos_filtrados <- reactive({

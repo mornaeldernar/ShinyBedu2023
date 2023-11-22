@@ -5,9 +5,22 @@
 # Cargas la libreria
 library(dplyr) # manipulamos datos
 library(stringr) # manipulamos cadenas de texto
+library(xlsx)
+library(readr)
 
+library(forecast)
+library(tseries)
 
-
+graficaPrediccion <- function(){
+  
+  load("Japan_world.RData")
+  load("Japan_world_timeseries.RData")
+  load("Japan_world_timeseries.decomp.RData")
+  load("modelo_arima_w1.RData")
+  prediccion_w<-forecast(modelo_arima_w1, h=12)
+  
+  plot(prediccion_w, main = "Predicción de visitas en Japón")
+}
 grafica1 <- function(df, pais) {
   if(pais == "Todos"){
     japan_timeseries <- ts(df$Visitantes,start=c(2017,1),end=c(2023,12),frequency=12)

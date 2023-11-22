@@ -1,0 +1,11 @@
+
+Call:
+arima(x = Japan_world_timeseries, order = c(0, 1, 1), seasonal = list(order = c(1, 
+    0, 0)))
+
+Coefficients:
+         ma1    sar1
+      0.3482  0.2855
+s.e.  0.1165  0.1139
+
+sigma^2 estimated as 6.537e+10:  log likelihood = -1068.61,  aic = 2143.22
