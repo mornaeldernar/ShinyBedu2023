@@ -33,8 +33,8 @@ ui <- fluidPage(
       h3("Filtros"),
       selectInput(inputId = "pais", h4("Selecciona el país:"), 
                  choices = nombresPaises, selected = "Todos"),
-      sliderInput(inputId = "anio", h4("Selecciona el período:"),
-                  min = 2017, max = 2023, value = c(2017, 2023)),
+      #sliderInput(inputId = "anio", h4("Selecciona el período:"),
+      #            min = 2017, max = 2023, value = c(2017, 2023)),
     ),
     mainPanel(
       img(src = "japan.png", align = "right", height = 75, width = 150),

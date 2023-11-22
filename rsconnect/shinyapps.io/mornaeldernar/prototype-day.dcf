@@ -1,0 +1,12 @@
+name: prototype-day
+title: prototype-day
+username: mornaeldernar
+account: mornaeldernar
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 10598583
+bundleId: 7955623
+url: https://mornaeldernar.shinyapps.io/prototype-day/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
