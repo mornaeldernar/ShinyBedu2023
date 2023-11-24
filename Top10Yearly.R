@@ -75,12 +75,12 @@ staticplot <-  ggplot(top10_formatted, aes(rank, group = Pais,
 anim <- staticplot +
   transition_states(state, transition_length = 4, state_length = 1, wrap = FALSE) +
   view_follow(fixed_x = TRUE)  +
-  labs(title = 'GDP per Year : {closest_state}',  
-       subtitle  =  "Top 10 Countries",
-       caption  = "GDP in Billions USD | Data Source: World Bank Data") 
+  labs(title = 'Visitantes a Japon en el mes: {closest_state}',  
+       subtitle  =  "Top 10",
+  ) 
 #devtools::install_github("r-rust/gifski")
 
 #install.packages("gifski")
 
 animate(anim, 78, fps = 2,  width = 1200, height = 1000, 
-        renderer = gifski_renderer("gganim.gif"))
+        renderer = gifski_renderer("www/gganim.gif"))

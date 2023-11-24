@@ -43,6 +43,7 @@ ui <- fluidPage(
                plotOutput("plotVisitantes")
       ),
       tabPanel("Mapa", leafletOutput("mapa")),
+      tabPanel("Top 10", img(src="gganim.gif", align="center",height="500px", width="800px")),
       tabPanel("Predicción", plotOutput("prediccion")),
       tabPanel("Datos", DTOutput(outputId = "dfVisitantes")))
     )
