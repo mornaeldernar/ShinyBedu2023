@@ -5,8 +5,9 @@ account: mornaeldernar
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 10598583
-bundleId:
+bundleId: 7966243
 url: https://mornaeldernar.shinyapps.io/prototype-day/
 version: 1
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: .RData|df.RData|Equipo11_PrototypeDay.pptx|forecast.R|Japan.csv|japon.jpg|map2.R|modelo_arima_w1.txt|prediccion_w.xlsx|Readme.md|top10.RData|Top10Yearly.R|transfromaciondedatos.R|www/fondo1.png

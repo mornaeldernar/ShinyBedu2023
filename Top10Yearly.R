@@ -5,7 +5,6 @@ library(lubridate)
 library(dplyr)
 library(stringr)
 library(ggplot2)
-setwd('D:/bedu/Final2023R/prototype-day')
 df <- read.csv("Japan.csv") # Carga un archivo csv llamado archivo, y lo llama df
 df <- data.frame(df)
 df <- rename(df,  Pais=Country.Area, 
